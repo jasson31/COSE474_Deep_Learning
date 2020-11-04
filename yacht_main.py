@@ -3,8 +3,7 @@ from enum import Enum
 import yacht_score
 from yacht_score import score
 
-# Each score board element stands for :
-# ONES, TWOS, THREES, FOURS, FIVES, SIXES, CHOICE, FOUR_OF_A_KIND, FULL_HOUSE, SMALL_STRAIGHT, LARGE_STRAIGHT, YACHT
+
 score_board = [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]
 score_func = [yacht_score.ONES, yacht_score.TWOS, yacht_score.THREES, yacht_score.FOURS, yacht_score.FIVES,
               yacht_score.SIXES, yacht_score.CHOICE, yacht_score.FOUR_OF_A_KIND, yacht_score.FULL_HOUSE,
@@ -42,8 +41,7 @@ def get_yacht_output():
 
 
 def set_score(dice, category):
-    if score_board[category] == -1:
-        score_board[category] = score(dice, score_func[category])
+    score_board[category] = score(dice, score_func[category])
 
 
 def is_game_finished():
@@ -52,15 +50,23 @@ def is_game_finished():
 
 def update(yacht_input):
     global roll_count, total_score
-    dice_input, score_input = yacht_input[:6], yacht_input[6:]
+    dice_input, score_input = yacht_input[:5], yacht_input[5:]
+
     if roll_count > 0 and not dice_input <= [0, 0, 0, 0, 0]:  # Roll dice
+        print('Roll dice')
         roll_dice(dice_input)
-    elif not is_game_finished():  # Set score
-        print(score_input.index(max(score_input)))
-        set_score(score_input, score_input.index(max(score_input)))
+
+    else:  # Set score
+        print('Set score')
+        for i in sorted(score_input, reverse=True):
+            if score_board[score_input.index(i)] == -1:
+                set_score(dice_status, score_input.index(i))
+                break
         roll_count = 3
         roll_dice([1, 1, 1, 1, 1])
-    else:  # Game Ended
+
+    if is_game_finished():  # Game Ended
+        print('Game End')
         bonus_counter = 0
         for i in score_board:
             total_score += i
@@ -69,5 +75,4 @@ def update(yacht_input):
         if bonus_counter >= 63:
             total_score += 35
 
-        print('Game End')
-        print(total_score)
+        print('total score : ', total_score)
