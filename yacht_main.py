@@ -25,10 +25,15 @@ def roll_dice(dice_to_roll):
 
 
 def get_yacht_output():
+    cur_total_score = 0
+    for i in range(len(score_board[cur_player])):
+        cur_total_score += score_board[cur_player][i]
+        if score_board[cur_player][i] == -1:
+            cur_total_score += 1
     if multi_mode:
-        return score_board[cur_player] + score_board[int(not cur_player)] + [roll_count] + dice_status
+        return score_board[cur_player] + score_board[int(not cur_player)] + [roll_count] + dice_status, cur_total_score, is_game_finished()
     else:
-        return score_board[cur_player] + [roll_count] + dice_status
+        return score_board[cur_player] + [roll_count] + dice_status, cur_total_score, is_game_finished()
 
 
 def set_multi_mode(mode):
