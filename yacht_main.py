@@ -1,5 +1,4 @@
 from random import randint
-from enum import Enum
 import yacht_score
 from yacht_score import score
 import math
@@ -84,3 +83,13 @@ def update(yacht_input):
 
             if multi_mode:
                 cur_player = int(not cur_player)
+
+
+def reset_game():
+    global score_board, dice_status, roll_count, total_score, cur_player
+    score_board = [[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
+                   [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]]
+    dice_status = [randint(1, 6), randint(1, 6), randint(1, 6), randint(1, 6), randint(1, 6)]
+    roll_count = 2
+    total_score = [0, 0]
+    cur_player = 0
