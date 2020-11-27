@@ -27,7 +27,7 @@ def roll_dice(roll_action_num):
 def dice_status_output():
     l = [0]*30
     for i in range(5):
-        l[i*5+dice_status[i]]+=10
+        l[i*6+dice_status[i]-1]+=10
     return l
 
 def get_yacht_output():
