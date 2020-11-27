@@ -49,6 +49,7 @@ def set_multi_mode(mode):
 
 def set_score(dice, category):
     score_board[cur_player][category] = score(dice, score_func[category])
+    return score(dice, score_func[category])
 
 
 def is_game_finished():
@@ -73,19 +74,28 @@ def update(command_index):
         if command_index < 31:
             if roll_count == 0:
                 cheated()
+                return -100
             else:
                 roll_dice(command_index+1)
-        
+                max_estimated_score = 0
+                for i in range(len(score_board[cur_player])):
+                    if score_board[cur_player][i] == -10:
+                        temp_score = score(dice_status, score_func[i])
+                        if temp_score > max_estimated_score:
+                            max_estimated_score = temp_score
+                return max_estimated_score
         else:
+            is_cheated, cur_set_score = False, 0
+
             score_index = command_index - 31
             #print(str(score_index))
             if score_board[cur_player][score_index] != -10:
                 cheated()
-            
+                is_cheated = True
             else:
                 # Set score
                 #print('player : ', cur_player, ' Set score')
-                set_score(dice_status, score_index)
+                cur_set_score = set_score(dice_status, score_index)
             
             
             roll_count = 3
@@ -104,6 +114,11 @@ def update(command_index):
 
             if multi_mode:
                 cur_player = int(not cur_player)
+
+            if is_cheated:
+                return -100
+            else:
+                return cur_set_score
 
 
 def reset_game():
