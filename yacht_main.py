@@ -25,18 +25,18 @@ def roll_dice(roll_action_num):
     return dice_status
 
 
-def dice_status_output():
+def dice_status_output(raw_dice_status):
     l = [0]*30
     for i in range(5):
-        l[i*6+dice_status[i]-1]+=10
+        l[i*6+raw_dice_status[i]-1]+=10
     return l
 
 def get_yacht_output():
     
     if multi_mode:
-        return score_board[cur_player] + score_board[int(not cur_player)] + [roll_count] + dice_status_output()+bonus_total, score_total, is_game_finished()
+        return score_board[cur_player] + score_board[int(not cur_player)] + [roll_count] + dice_status_output(dice_status)+bonus_total, score_total, is_game_finished()
     else:
-        return score_board[cur_player] + [roll_count] + dice_status_output() + [bonus_total[cur_player]], score_total[cur_player], is_game_finished()
+        return score_board[cur_player] + [roll_count] + dice_status_output(dice_status) + [bonus_total[cur_player]], score_total[cur_player], is_game_finished()
 
 
 def set_multi_mode(mode):
