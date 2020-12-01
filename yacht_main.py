@@ -116,7 +116,7 @@ def update(command_index):
 
 
 def reset_game():
-    global score_board, dice_status, roll_count, score_total, cur_player
+    global score_board, dice_status, roll_count, score_total, cur_player, bonus_total
     score_board = [[0]*12]*2
     dice_status = [randint(1, 6), randint(1, 6), randint(1, 6), randint(1, 6), randint(1, 6)]
     roll_count = 2
