@@ -6,7 +6,7 @@ from random import *
 
 def create_train_set(size_per_score_type):
     train_set = []
-    for score_type in range(score_func.index(yacht_score.FOUR_OF_A_KIND), score_func.index(yacht_score.YACHT) + 1):
+    for score_type in range(score_func.index(yacht_score.ONES), score_func.index(yacht_score.YACHT) + 1):
         for i in range(size_per_score_type):
             raw_dice_state = [0] * 5
 
@@ -67,7 +67,11 @@ def create_train_set(size_per_score_type):
 
             roll_count_state = [randint(0, 2)]
             dice_state = dice_status_output(raw_dice_state)
-            bonus_state = [35 * randint(0, 1)]
+
+            bonus_score = 0
+            for upper_scores in range(score_func.index(yacht_score.ONES), score_func.index(yacht_score.SIXES) + 1):
+                bonus_score += randint(1, 6) * score_state[upper_scores]
+            bonus_state = [bonus_score]
             state = score_state + roll_count_state + dice_state + bonus_state
 
             action = 31 + score_type
@@ -87,4 +91,4 @@ def create_train_set(size_per_score_type):
             train_set.append([state, action, new_state, step_reward])
     return train_set
 
-
+create_train_set(10)

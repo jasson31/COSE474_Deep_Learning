@@ -28,15 +28,27 @@ def roll_dice(roll_action_num):
 def dice_status_output(raw_dice_status):
     l = [0]*30
     for i in range(5):
-        l[i*6+raw_dice_status[i]-1]+=10
+        l[i*6+raw_dice_status[i]-1] += 10
     return l
 
+
+def get_available_input():
+    dice_action, score_action = [1] * 31, [1] * 12
+    if roll_count == 0:
+        dice_action = [0] * 31
+    for i in score_board[cur_player]:
+        if i == 1:
+            score_action[i] = 0
+    return dice_action + score_action
+
+
 def get_yacht_output():
-    
     if multi_mode:
-        return score_board[cur_player] + score_board[int(not cur_player)] + [roll_count] + dice_status_output(dice_status)+bonus_total, score_total, is_game_finished()
+        return score_board[cur_player] + score_board[int(not cur_player)] + [roll_count]\
+               + dice_status_output(dice_status) + bonus_total, score_total, is_game_finished(), get_available_input()
     else:
-        return score_board[cur_player] + [roll_count] + dice_status_output(dice_status) + [bonus_total[cur_player]], score_total[cur_player], is_game_finished()
+        return score_board[cur_player] + [roll_count] + dice_status_output(dice_status) + [bonus_total[cur_player]],\
+               score_total[cur_player], is_game_finished(), get_available_input()
 
 
 def set_multi_mode(mode):
@@ -56,6 +68,7 @@ def set_score(dice, category):
 
 def is_game_finished():
     return 0 not in score_board[cur_player]
+
 
 def cheated():
     for i in range(len(score_board[cur_player])):
