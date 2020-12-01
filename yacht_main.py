@@ -36,8 +36,8 @@ def get_available_input():
     dice_action, score_action = [1] * 31, [1] * 12
     if roll_count == 0:
         dice_action = [0] * 31
-    for i in score_board[cur_player]:
-        if i == 1:
+    for i in range(len(score_board[cur_player])):
+        if score_board[cur_player][i] == 1:
             score_action[i] = 0
     return dice_action + score_action
 
