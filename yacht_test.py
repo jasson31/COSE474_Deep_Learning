@@ -6,7 +6,7 @@ from random import *
 
 def create_train_set(size_per_score_type):
     train_set = []
-    for score_type in range(score_func.index(yacht_score.ONES), score_func.index(yacht_score.YACHT) + 1):
+    for score_type in range(score_func.index(yacht_score.SIXES), score_func.index(yacht_score.YACHT) + 1):
         for i in range(size_per_score_type):
             already_set_scores = [0] * 6
             raw_dice_state = [0] * 5
