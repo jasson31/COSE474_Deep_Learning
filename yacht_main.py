@@ -1,3 +1,4 @@
+import random
 from random import randint
 import yacht_score
 from yacht_score import score
@@ -24,6 +25,75 @@ def roll_dice(roll_action_num):
     roll_count -= 1
     return dice_status
 
+def handled_roll():
+        # straight_3, straight_4, straight_5, 212, fh, 311, 41, yacht
+        handled_weight = [5, 3, 2, 3, 2, 4, 2, 1]
+        category = random.choices(population=range(len(handled_weight)), weights=handled_weight)[0]
+        # straight_3
+        if category == 0:
+            bot = random.randint(1, 4)
+            seq = random.sample(list(range(5)), 5)
+            for i in range(3):
+                dice_status[seq[i]] = bot + i
+            remain_value = list(range(1, 7))
+            if bot - 1 > 0:
+                remain_value.remove(bot -1)
+            if bot + 3 < 7:
+                remain_value.remove(bot + 3)
+            dice_status[seq[3]] = random.choice(remain_value)
+            dice_status[seq[4]] = random.choice(remain_value)
+        # straight_4
+        elif category == 1:
+            seq = random.sample(list(range(5)), 5)
+            bot = random.choice([1,3])
+            for i in range(4):
+                dice_status[seq[i]] = bot + i
+            remain_value = list(range(1,7))
+            if bot == 1:
+                remain_value.remove(5)
+            else:
+                remain_value.remove(2)
+            dice_status[seq[4]] = random.choice(remain_value)
+        # straight_5
+        elif category == 2:
+            seq = random.sample(list(range(5)), 5)
+            bot = random.randint(1,2)
+            for i in range(5):
+                dice_status[seq[i]] = bot + i
+        # fh_212
+        elif category == 3:
+            seq = random.sample(list(range(5)), 5)
+            fh_values = random.sample(list(range(1, 7)), k=3)
+            for i in range(4):
+                dice_status[seq[i]] = fh_values[i//2]
+            dice_status[seq[4]] = fh_values[2]
+        # fh
+        elif category == 4:
+            seq = random.sample(list(range(5)), 5)
+            fh_values = random.sample(list(range(1, 7)), k=2)
+            for i in range(4):
+                dice_status[seq[i]] = fh_values[i//2]
+            dice_status[seq[4]] = fh_values[1]
+        # 311
+        elif category == 5:
+            seq = random.sample(list(range(5)), 5)
+            tri_values = random.sample(list(range(1, 7)), k=3)
+            for i in range(3):
+                dice_status[seq[i]] = tri_values[0]
+            dice_status[seq[3]] = tri_values[1]
+            dice_status[seq[4]] = tri_values[2]
+        # 41
+        elif category == 6:
+            seq = random.sample(list(range(5)), 5)
+            four_values = random.sample(list(range(1, 7)), k=2)
+            for i in range(5):
+                dice_status[seq[i]] = four_values[i//4]
+        # yacht
+        elif category == 7:
+            value = random.randint(1, 6)
+            for i in range(5):
+                dice_status[i] = value
+        return dice_status
 
 def dice_status_output(raw_dice_status):
     l = [0]*30
