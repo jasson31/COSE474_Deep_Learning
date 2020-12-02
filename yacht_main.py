@@ -47,7 +47,7 @@ def get_yacht_output():
         return score_board[cur_player] + score_board[int(not cur_player)] + [roll_count]\
                + dice_status_output(dice_status) + bonus_total, score_total, is_game_finished(), get_available_input()
     else:
-        return score_board[cur_player] + [roll_count] + dice_status_output(dice_status) + [bonus_total[cur_player]],\
+        return score_board[cur_player] + [roll_count] + dice_status_output(dice_status) + [bonus_total[cur_player]]+ [score_total[cur_player]],\
                score_total[cur_player], is_game_finished(), get_available_input()
 
 
@@ -63,7 +63,7 @@ def set_score(dice, category):
     score_total[cur_player] += added_score
     if category<6:
         bonus_total[cur_player] += added_score
-    return
+    return added_score
 
 
 def is_game_finished():
@@ -85,36 +85,35 @@ def update(command_index):
             cur_player = int(not cur_player)
     else:
         #command_index = yacht_input.index(max(yacht_input))
-        
+        bonus_earned = bonus_total[cur_player] >= 63
         if command_index < 31:
             if roll_count == 0:
                 cheated()
-                return
+                return -500
             else:
                 roll_dice(command_index+1)
-                return
+                return 0
         else:
             score_index = command_index - 31
             #print(str(score_index))
             if score_board[cur_player][score_index] != 0:
                 cheated()
+                return -500
             else:
-                set_score(dice_status, score_index)
+                added_score = set_score(dice_status, score_index)
+            
+            if not bonus_earned and bonus_total[cur_player] >= 63:
+                score_total[cur_player] += 35
+                added_score += 35
             
             roll_count = 3
             roll_dice(31)
             
-            if is_game_finished():  # Game Ended
-
-                if bonus_total[cur_player] >= 63:
-                    score_total[cur_player] += 35
-                
-                #print('player : ', cur_player, ' total score : ', score_sum)
             if multi_mode:
                 cur_player = int(not cur_player)
-
-
-
+            return added_score
+            
+            
 def reset_game():
     global score_board, dice_status, roll_count, score_total, cur_player, bonus_total
     score_board = [[0]*12]*2
