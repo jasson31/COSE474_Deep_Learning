@@ -1,3 +1,4 @@
+import random
 from random import randint
 import yacht_score
 from yacht_score import score
