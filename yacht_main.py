@@ -2,6 +2,7 @@ from random import randint
 import yacht_score
 from yacht_score import score
 import math
+import random
 
 score_board = [[0]*12]*2
 score_func = [yacht_score.ONES, yacht_score.TWOS, yacht_score.THREES, yacht_score.FOURS, yacht_score.FIVES,
@@ -158,7 +159,7 @@ def update(command_index):
         if command_index < 31:
             if roll_count == 0:
                 cheated()
-                return -500
+                return -50
             else:
                 roll_dice(command_index+1)
                 return 0
@@ -167,7 +168,7 @@ def update(command_index):
             #print(str(score_index))
             if score_board[cur_player][score_index] != 0:
                 cheated()
-                return -500
+                return -50
             else:
                 added_score = set_score(dice_status, score_index)
             
