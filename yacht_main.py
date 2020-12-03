@@ -49,6 +49,11 @@ def get_yacht_output():
     else:
         return score_board[cur_player] + [roll_count] + dice_status_output(dice_status) + [bonus_total[cur_player]],\
                score_total[cur_player], is_game_finished(), get_available_input()
+    
+def get_yacht_output_test():
+    return score_board[cur_player] +['asdf'] + [roll_count] +['asdf'] + dice_status +['asdf'] + [bonus_total[cur_player]],\
+               score_total[cur_player], is_game_finished(), get_available_input()
+    
 
 
 def set_multi_mode(mode):
