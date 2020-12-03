@@ -28,7 +28,7 @@ def roll_dice(roll_action_num):
 def dice_status_output(raw_dice_status):
     l = [0]*30
     for i in range(5):
-        l[i*6+raw_dice_status[i]-1] += 10
+        l[i*6+raw_dice_status[i]-1] += 1
     return l
 
 
@@ -47,7 +47,7 @@ def get_yacht_output():
         return score_board[cur_player] + score_board[int(not cur_player)] + [roll_count]\
                + dice_status_output(dice_status) + bonus_total, score_total, is_game_finished(), get_available_input()
     else:
-        return score_board[cur_player] + [roll_count] + dice_status_output(dice_status) + [bonus_total[cur_player]],\
+        return score_board[cur_player] + [roll_count / 2] + dice_status_output(dice_status) + [min(bonus_total[cur_player], 35) / 35],\
                score_total[cur_player], is_game_finished(), get_available_input()
     
 def get_yacht_output_test():
