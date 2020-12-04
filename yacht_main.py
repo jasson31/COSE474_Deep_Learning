@@ -98,7 +98,7 @@ def handled_roll():
 def dice_status_output(raw_dice_status):
     l = [0]*30
     for i in range(5):
-        l[i*6+raw_dice_status[i]-1] += 10
+        l[i*6+raw_dice_status[i]-1] += 30
     return l
 
 
@@ -129,7 +129,7 @@ def set_multi_mode(mode):
 def set_score(dice, category):
     added_score = score(dice, score_func[category])
     
-    score_board[cur_player][category] = 1
+    score_board[cur_player][category] = 30
     score_total[cur_player] += added_score
     if category<6:
         bonus_total[cur_player] += added_score
@@ -159,7 +159,7 @@ def update(command_index):
         if command_index < 31:
             if roll_count == 0:
                 cheated()
-                return -50
+                return -500
             else:
                 roll_dice(command_index+1)
                 return 0
@@ -168,7 +168,7 @@ def update(command_index):
             #print(str(score_index))
             if score_board[cur_player][score_index] != 0:
                 cheated()
-                return -50
+                return -500
             else:
                 added_score = set_score(dice_status, score_index)
             
