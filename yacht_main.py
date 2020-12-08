@@ -98,7 +98,7 @@ def handled_roll():
 def dice_status_output(raw_dice_status):
     l = [0]*30
     for i in range(5):
-        l[i*6+raw_dice_status[i]-1] += 30
+        l[i*6+raw_dice_status[i]-1] += 1
     return l
 
 
@@ -107,7 +107,7 @@ def get_available_input():
     if roll_count == 0:
         dice_action = [0] * 31
     for i in range(len(score_board[cur_player])):
-        if score_board[cur_player][i] == 1:
+        if score_board[cur_player][i] == 0:
             score_action[i] = 0
     return dice_action + score_action
 
@@ -117,8 +117,9 @@ def get_yacht_output():
         return score_board[cur_player] + score_board[int(not cur_player)] + [roll_count]\
                + dice_status_output(dice_status) + bonus_total, score_total, is_game_finished(), get_available_input()
     else:
-        return score_board[cur_player] + [roll_count] + dice_status_output(dice_status) + [bonus_total[cur_player]]+ [score_total[cur_player]],\
-               score_total[cur_player], is_game_finished(), get_available_input()
+        return score_board[cur_player] + [roll_count] + dice_status_output(dice_status)\
+                + [bonus_total[cur_player] / 126]+ [score_total[cur_player] / 350],\
+                  score_total[cur_player], is_game_finished(), get_available_input()
 
 
 def set_multi_mode(mode):
@@ -129,7 +130,7 @@ def set_multi_mode(mode):
 def set_score(dice, category):
     added_score = score(dice, score_func[category])
     
-    score_board[cur_player][category] = 30
+    score_board[cur_player][category] = 0
     score_total[cur_player] += added_score
     if category<6:
         bonus_total[cur_player] += added_score
@@ -137,12 +138,12 @@ def set_score(dice, category):
 
 
 def is_game_finished():
-    return 0 not in score_board[cur_player]
+    return 1 not in score_board[cur_player]
 
 
 def cheated():
     for i in range(len(score_board[cur_player])):
-        if score_board[cur_player][i] == 0:
+        if score_board[cur_player][i] == 1:
             score_board[cur_player][i] = -1
 
 
@@ -159,16 +160,16 @@ def update(command_index):
         if command_index < 31:
             if roll_count == 0:
                 cheated()
-                return -500
+                return -1
             else:
                 roll_dice(command_index+1)
                 return 0
         else:
             score_index = command_index - 31
             #print(str(score_index))
-            if score_board[cur_player][score_index] != 0:
+            if score_board[cur_player][score_index] == 0:
                 cheated()
-                return -500
+                return -1
             else:
                 added_score = set_score(dice_status, score_index)
             
@@ -181,14 +182,25 @@ def update(command_index):
             
             if multi_mode:
                 cur_player = int(not cur_player)
+            return 1
             return added_score
             
             
 def reset_game():
     global score_board, dice_status, roll_count, score_total, cur_player, bonus_total
-    score_board = [[0]*12]*2
+    score_board = [[1]*12]*2
     dice_status = [randint(1, 6), randint(1, 6), randint(1, 6), randint(1, 6), randint(1, 6)]
     roll_count = 2
     score_total = [0, 0]
     bonus_total = [0, 0]
     cur_player = 0
+    
+    
+"""
+상체 : 0개 0, 1~2개 0.5, 3개 1, 4~5 1.5, 6 2
+초이스 : 0~10 0, 10~20, 0.5, 20~30 1
+포카, 풀하 : 0 0, 1~10 0.3, 11~20 0.8, 21~30 1.3
+스트 : 못먹으면 0 먹으면 1
+야추 : 못먹으면 0.2 먹으면 2.5
+
+"""
