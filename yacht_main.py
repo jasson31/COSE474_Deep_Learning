@@ -147,6 +147,48 @@ def cheated():
             score_board[cur_player][i] = -1
 
 
+def get_reward(dice_status, score_index):
+    checker = yacht_score.score(dice_status, score_func[score_index])
+    if score_index <= score_func.index(yacht_score.SIXES):
+        if dice_status.count(score_index) == 0:
+            return 0
+        elif 1 <= dice_status.count(score_index) <= 2:
+            return 0.5
+        elif dice_status.count(score_index) == 3:
+            return 1
+        elif 4 <= dice_status.count(score_index) <= 5:
+            return 1.5
+        else:
+            return 2
+    elif score_index == score_func.index(yacht_score.CHOICE):
+        if checker <= 10:
+            return 0
+        elif checker <= 20:
+            return 0.5
+        else:
+            return 1
+    elif score_index == score_func.index(yacht_score.FOUR_OF_A_KIND) \
+            or score_index == score_func.index(yacht_score.FULL_HOUSE):
+        if checker <= 10:
+            return 0
+        elif checker <= 20:
+            return 0.5
+        else:
+            return 1
+    elif score_index == score_func.index(yacht_score.SMALL_STRAIGHT) \
+            or score_index == score_func.index(yacht_score.LARGE_STRAIGHT):
+        if checker == 10:
+            return 0
+        else:
+            return 1
+    elif score_index == score_func.index(yacht_score.YACHT):
+        if checker == 10:
+            return 0.2
+        else:
+            return 2.5
+
+
+
 def update(command_index):
     global roll_count, score_total, cur_player
     if is_game_finished():
@@ -176,6 +218,8 @@ def update(command_index):
             if not bonus_earned and bonus_total[cur_player] >= 63:
                 score_total[cur_player] += 35
                 added_score += 35
+
+            reward = get_reward(dice_status, score_index)
             
             roll_count = 3
             roll_dice(31)
@@ -183,7 +227,7 @@ def update(command_index):
             if multi_mode:
                 cur_player = int(not cur_player)
             return 1
-            return added_score
+            return reward
             
             
 def reset_game():
