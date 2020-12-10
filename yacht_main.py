@@ -97,7 +97,7 @@ def handled_roll():
     dice_status.sort()
     return dice_status
 
-def expected_score()
+def expected_score():
     ret = [0] * 12
     for i in range(12):
         ret[i] = score(dice_status, score_func[i])

@@ -1,6 +1,6 @@
 from yacht_main import score_func
 from yacht_main import yacht_score
-from yacht_main import dice_status_output
+from yacht_main import get_reward
 from random import *
 
 
@@ -66,23 +66,56 @@ def create_train_set(size_per_score_type):
                     score_state[score_state_index] = 0
 
             roll_count_state = [randint(0, 2)]
-            dice_state = dice_status_output(raw_dice_state)
+            #dice_state = dice_status_output(raw_dice_state)
+            dice_state = raw_dice_state
+
+
+
+
+
+
+
 
             bonus_score = 0
             for upper_scores in range(score_func.index(yacht_score.ONES), score_func.index(yacht_score.SIXES) + 1):
                 bonus_score += randint(1, 6) * score_state[upper_scores]
-            bonus_state = [bonus_score]
-            state = score_state + roll_count_state + dice_state + bonus_state
+            bonus_state = [bonus_score / 126]
 
+
+
+            score_total = bonus_score
+
+
+            for lower_scores in range(score_func.index(yacht_score.CHOICE), score_func.index(yacht_score.YACHT) + 1):
+                if lower_scores != score_type:
+                    if score_state[score_type] == 1:
+                        if score_func.index(yacht_score.CHOICE):
+                            score_total += (randint(1, 6) + randint(1, 6) + randint(1, 6) + randint(1, 6) + randint(1, 6))
+                        elif score_func.index(yacht_score.FULL_HOUSE):
+                            score_total += (2 * randint(1, 6)) + (3 * randint(1, 6))
+                        elif score_func.index(yacht_score.FOUR_OF_A_KIND):
+                            score_total += randint(1, 6) + (4 * randint(1, 6))
+                        elif score_func.index(yacht_score.SMALL_STRAIGHT):
+                            score_total += randint(0, 1) * 15
+                        elif score_func.index(yacht_score.LARGE_STRAIGHT):
+                            score_total += randint(0, 1) * 30
+                        elif score_func.index(yacht_score.YACHT):
+                            score_total += randint(0, 1) * 50
+
+
+
+
+
+            state = score_state + roll_count_state + dice_state + bonus_state + [score_total / 350]
+            
             action = 31 + score_type
 
             new_score_state = score_state
             new_score_state[score_type] = 1
-            new_dice_state = dice_status_output(
-                [randint(1, 6), randint(1, 6), randint(1, 6), randint(1, 6), randint(1, 6)])
-            new_state = new_score_state + [2] + new_dice_state + bonus_state
+            new_dice_state = [[randint(1, 6), randint(1, 6), randint(1, 6), randint(1, 6), randint(1, 6)]]
+            new_state = new_score_state + [2] + new_dice_state + bonus_state + [(score_total + yacht_score.score(raw_dice_state, score_func[score_type])) / 350]
 
-            step_reward = yacht_score.score(raw_dice_state, score_func[score_type])
+            step_reward = get_reward(raw_dice_state, score_func[score_type])
 
             # print("      state : ", state)
             # print("     action : ", action)
