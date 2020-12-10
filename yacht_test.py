@@ -112,10 +112,10 @@ def create_train_set(size_per_score_type):
 
             new_score_state = score_state
             new_score_state[score_type] = 1
-            new_dice_state = [[randint(1, 6), randint(1, 6), randint(1, 6), randint(1, 6), randint(1, 6)]]
+            new_dice_state = [randint(1, 6), randint(1, 6), randint(1, 6), randint(1, 6), randint(1, 6)]
             new_state = new_score_state + [2] + new_dice_state + bonus_state + [(score_total + yacht_score.score(raw_dice_state, score_func[score_type])) / 350]
 
-            step_reward = get_reward(raw_dice_state, score_func[score_type])
+            step_reward = get_reward(raw_dice_state, score_type)
 
             # print("      state : ", state)
             # print("     action : ", action)
