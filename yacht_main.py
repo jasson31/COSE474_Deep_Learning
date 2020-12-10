@@ -128,7 +128,7 @@ def get_yacht_output():
         score_board_output = [0] * 12
 
         for i in range(len(score_board_output)):
-            if score_board[cur_player][i] == 1:
+            if score_board[cur_player][i] == 0:
                 score_board_output[i] = -10
             else:
                 score_board_output[i] = yacht_score.score(dice_status, score_func[i])
