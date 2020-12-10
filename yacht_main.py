@@ -23,77 +23,85 @@ def roll_dice(roll_action_num):
             dice_status[i] = randint(1, 6)
         roll_action_num = roll_action_num // 2
     roll_count -= 1
+    dice_status.sort()
     return dice_status
 
 def handled_roll():
-        # straight_3, straight_4, straight_5, 212, fh, 311, 41, yacht
-        handled_weight = [5, 3, 2, 3, 2, 4, 2, 1]
-        category = random.choices(population=range(len(handled_weight)), weights=handled_weight)[0]
-        # straight_3
-        if category == 0:
-            bot = random.randint(1, 4)
-            seq = random.sample(list(range(5)), 5)
-            for i in range(3):
-                dice_status[seq[i]] = bot + i
-            remain_value = list(range(1, 7))
-            if bot - 1 > 0:
-                remain_value.remove(bot -1)
-            if bot + 3 < 7:
-                remain_value.remove(bot + 3)
-            dice_status[seq[3]] = random.choice(remain_value)
-            dice_status[seq[4]] = random.choice(remain_value)
-        # straight_4
-        elif category == 1:
-            seq = random.sample(list(range(5)), 5)
-            bot = random.choice([1,3])
-            for i in range(4):
-                dice_status[seq[i]] = bot + i
-            remain_value = list(range(1,7))
-            if bot == 1:
-                remain_value.remove(5)
-            else:
-                remain_value.remove(2)
-            dice_status[seq[4]] = random.choice(remain_value)
-        # straight_5
-        elif category == 2:
-            seq = random.sample(list(range(5)), 5)
-            bot = random.randint(1,2)
-            for i in range(5):
-                dice_status[seq[i]] = bot + i
-        # fh_212
-        elif category == 3:
-            seq = random.sample(list(range(5)), 5)
-            fh_values = random.sample(list(range(1, 7)), k=3)
-            for i in range(4):
-                dice_status[seq[i]] = fh_values[i//2]
-            dice_status[seq[4]] = fh_values[2]
-        # fh
-        elif category == 4:
-            seq = random.sample(list(range(5)), 5)
-            fh_values = random.sample(list(range(1, 7)), k=2)
-            for i in range(4):
-                dice_status[seq[i]] = fh_values[i//2]
-            dice_status[seq[4]] = fh_values[1]
-        # 311
-        elif category == 5:
-            seq = random.sample(list(range(5)), 5)
-            tri_values = random.sample(list(range(1, 7)), k=3)
-            for i in range(3):
-                dice_status[seq[i]] = tri_values[0]
-            dice_status[seq[3]] = tri_values[1]
-            dice_status[seq[4]] = tri_values[2]
-        # 41
-        elif category == 6:
-            seq = random.sample(list(range(5)), 5)
-            four_values = random.sample(list(range(1, 7)), k=2)
-            for i in range(5):
-                dice_status[seq[i]] = four_values[i//4]
-        # yacht
-        elif category == 7:
-            value = random.randint(1, 6)
-            for i in range(5):
-                dice_status[i] = value
-        return dice_status
+    # straight_3, straight_4, straight_5, 212, fh, 311, 41, yacht
+    handled_weight = [5, 3, 2, 3, 2, 4, 2, 1]
+    category = random.choices(population=range(len(handled_weight)), weights=handled_weight)[0]
+    # straight_3
+    if category == 0:
+        bot = random.randint(1, 4)
+        seq = random.sample(list(range(5)), 5)
+        for i in range(3):
+            dice_status[seq[i]] = bot + i
+        remain_value = list(range(1, 7))
+        if bot - 1 > 0:
+            remain_value.remove(bot -1)
+        if bot + 3 < 7:
+            remain_value.remove(bot + 3)
+        dice_status[seq[3]] = random.choice(remain_value)
+        dice_status[seq[4]] = random.choice(remain_value)
+    # straight_4
+    elif category == 1:
+        seq = random.sample(list(range(5)), 5)
+        bot = random.choice([1,3])
+        for i in range(4):
+            dice_status[seq[i]] = bot + i
+        remain_value = list(range(1,7))
+        if bot == 1:
+            remain_value.remove(5)
+        else:
+            remain_value.remove(2)
+        dice_status[seq[4]] = random.choice(remain_value)
+    # straight_5
+    elif category == 2:
+        seq = random.sample(list(range(5)), 5)
+        bot = random.randint(1,2)
+        for i in range(5):
+            dice_status[seq[i]] = bot + i
+    # fh_212
+    elif category == 3:
+        seq = random.sample(list(range(5)), 5)
+        fh_values = random.sample(list(range(1, 7)), k=3)
+        for i in range(4):
+            dice_status[seq[i]] = fh_values[i//2]
+        dice_status[seq[4]] = fh_values[2]
+    # fh
+    elif category == 4:
+        seq = random.sample(list(range(5)), 5)
+        fh_values = random.sample(list(range(1, 7)), k=2)
+        for i in range(4):
+            dice_status[seq[i]] = fh_values[i//2]
+        dice_status[seq[4]] = fh_values[1]
+    # 311
+    elif category == 5:
+        seq = random.sample(list(range(5)), 5)
+        tri_values = random.sample(list(range(1, 7)), k=3)
+        for i in range(3):
+            dice_status[seq[i]] = tri_values[0]
+        dice_status[seq[3]] = tri_values[1]
+        dice_status[seq[4]] = tri_values[2]
+    # 41
+    elif category == 6:
+        seq = random.sample(list(range(5)), 5)
+        four_values = random.sample(list(range(1, 7)), k=2)
+        for i in range(5):
+            dice_status[seq[i]] = four_values[i//4]
+    # yacht
+    elif category == 7:
+        value = random.randint(1, 6)
+        for i in range(5):
+            dice_status[i] = value
+    dice_status.sort()
+    return dice_status
+
+def expected_score()
+    ret = [0] * 12
+    for i in range(12):
+        ret[i] = score(dice_status, score_func[i])
+    return ret
 
 def dice_status_output(raw_dice_status):
     l = [0]*30
@@ -115,9 +123,9 @@ def get_available_input():
 def get_yacht_output():
     if multi_mode:
         return score_board[cur_player] + score_board[int(not cur_player)] + [roll_count]\
-               + dice_status_output(dice_status) + bonus_total, score_total, is_game_finished(), get_available_input()
+               + dice_status + bonus_total, score_total, is_game_finished(), get_available_input()
     else:
-        return score_board[cur_player] + [roll_count] + dice_status_output(dice_status)\
+        return score_board[cur_player] + [roll_count] + dice_status\
                 + [bonus_total[cur_player] / 126]+ [score_total[cur_player] / 350],\
                   score_total[cur_player], is_game_finished(), get_available_input()
 
@@ -151,7 +159,7 @@ def get_reward(dice_status, score_index):
     checker = yacht_score.score(dice_status, score_func[score_index])
     if score_index <= score_func.index(yacht_score.SIXES):
         if dice_status.count(score_index) == 0:
-            return 0
+            return -1
         elif 1 <= dice_status.count(score_index) <= 2:
             return 0.5
         elif dice_status.count(score_index) == 3:
@@ -162,7 +170,7 @@ def get_reward(dice_status, score_index):
             return 2
     elif score_index == score_func.index(yacht_score.CHOICE):
         if checker <= 10:
-            return 0
+            return -1
         elif checker <= 20:
             return 0.5
         else:
@@ -170,7 +178,7 @@ def get_reward(dice_status, score_index):
     elif score_index == score_func.index(yacht_score.FOUR_OF_A_KIND) \
             or score_index == score_func.index(yacht_score.FULL_HOUSE):
         if checker <= 10:
-            return 0
+            return -1
         elif checker <= 20:
             return 0.5
         else:
@@ -178,12 +186,12 @@ def get_reward(dice_status, score_index):
     elif score_index == score_func.index(yacht_score.SMALL_STRAIGHT) \
             or score_index == score_func.index(yacht_score.LARGE_STRAIGHT):
         if checker == 10:
-            return 0
+            return -1
         else:
             return 1
     elif score_index == score_func.index(yacht_score.YACHT):
         if checker == 10:
-            return 0.2
+            return -0.2
         else:
             return 2.5
 
@@ -202,7 +210,7 @@ def update(command_index):
         if command_index < 31:
             if roll_count == 0:
                 cheated()
-                return -1
+                return -10
             else:
                 roll_dice(command_index+1)
                 return 0
@@ -211,7 +219,7 @@ def update(command_index):
             #print(str(score_index))
             if score_board[cur_player][score_index] == 0:
                 cheated()
-                return -1
+                return -10
             else:
                 added_score = set_score(dice_status, score_index)
             
@@ -226,7 +234,6 @@ def update(command_index):
             
             if multi_mode:
                 cur_player = int(not cur_player)
-            return 1
             return reward
             
             
