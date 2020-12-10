@@ -125,9 +125,19 @@ def get_yacht_output():
         return score_board[cur_player] + score_board[int(not cur_player)] + [roll_count]\
                + dice_status + bonus_total, score_total, is_game_finished(), get_available_input()
     else:
-        return score_board[cur_player] + [roll_count] + dice_status\
+        score_board_output = [0] * 12
+
+        for i in range(len(score_board_output)):
+            if score_board[cur_player][i] == 1:
+                score_board_output[i] = -10
+            else:
+                score_board_output[i] = yacht_score.score(dice_status, score_func[i])
+
+        print(score_board_output)
+
+        '''return score_board_output + [roll_count] + dice_status\
                 + [bonus_total[cur_player] / 126]+ [score_total[cur_player] / 350],\
-                  score_total[cur_player], is_game_finished(), get_available_input()
+                  score_total[cur_player], is_game_finished(), get_available_input()'''
 
 
 def set_multi_mode(mode):
