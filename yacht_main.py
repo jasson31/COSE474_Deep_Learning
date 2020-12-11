@@ -4,7 +4,7 @@ from yacht_score import score
 import math
 import random
 
-score_board = [[0]*12]*2
+score_board = [[0]*12]*2 #0 if not scored, 1 if scored
 score_func = [yacht_score.ONES, yacht_score.TWOS, yacht_score.THREES, yacht_score.FOURS, yacht_score.FIVES,
               yacht_score.SIXES, yacht_score.CHOICE, yacht_score.FOUR_OF_A_KIND, yacht_score.FULL_HOUSE,
               yacht_score.SMALL_STRAIGHT, yacht_score.LARGE_STRAIGHT, yacht_score.YACHT]
@@ -96,9 +96,9 @@ def handled_roll():
         return dice_status
 
 def dice_status_output(raw_dice_status):
-    l = [0]*30
+    l = [0]*6
     for i in range(5):
-        l[i*6+raw_dice_status[i]-1] += 30
+        l[raw_dice_status[i]-1] += 1
     return l
 
 
@@ -111,15 +111,23 @@ def get_available_input():
             score_action[i] = 0
     return dice_action + score_action
 
+def expected_scores():
+    expect = [-100]*12
+    for i in range(12):
+        if score_board[cur_player][i] != 0:
+            continue
+        expect[i] = score_func[i](dice_status)
+        if i<6 and 63 > bonus_total[cur_player] >= 63-expect[i]:
+            expect[i] += 35
+    return expect
 
 def get_yacht_output():
     if multi_mode:
-        return score_board[cur_player] + score_board[int(not cur_player)] + [roll_count]\
-               + dice_status_output(dice_status) + bonus_total, score_total, is_game_finished(), get_available_input()
+        return
     else:
-        return score_board[cur_player] + [roll_count] + dice_status_output(dice_status) + [bonus_total[cur_player]]+ [score_total[cur_player]],\
-               score_total[cur_player], is_game_finished(), get_available_input()
-
+        return expected_scores() +\
+              [bonus_total[cur_player], roll_count], score_total[cur_player], is_game_finished()
+              #dice_status_output(dice_status) +\
 
 def set_multi_mode(mode):
     global multi_mode
@@ -128,11 +136,7 @@ def set_multi_mode(mode):
 
 def set_score(dice, category):
     added_score = score(dice, score_func[category])
-    
-    score_board[cur_player][category] = 30
-    score_total[cur_player] += added_score
-    if category<6:
-        bonus_total[cur_player] += added_score
+    score_board[cur_player][category] = 1
     return added_score
 
 
@@ -143,39 +147,43 @@ def is_game_finished():
 def cheated():
     for i in range(len(score_board[cur_player])):
         if score_board[cur_player][i] == 0:
-            score_board[cur_player][i] = -1
+            score_board[cur_player][i] = 1
 
 
 def update(command_index):
     global roll_count, score_total, cur_player
+    command_index = int(command_index)
+    
+    #print("played {0}:;;".format(command_index))
     if is_game_finished():
         #print('Game End')
         #print('player : ', cur_player, ' total score : ', score_total[cur_player])
         if multi_mode:
             cur_player = int(not cur_player)
     else:
-        #command_index = yacht_input.index(max(yacht_input))
-        bonus_earned = bonus_total[cur_player] >= 63
         if command_index < 31:
             if roll_count == 0:
                 cheated()
-                return -500
+                return -100
             else:
                 roll_dice(command_index+1)
                 return 0
         else:
             score_index = command_index - 31
-            #print(str(score_index))
+
             if score_board[cur_player][score_index] != 0:
                 cheated()
-                return -500
+                return -100
             else:
                 added_score = set_score(dice_status, score_index)
             
-            if not bonus_earned and bonus_total[cur_player] >= 63:
-                score_total[cur_player] += 35
-                added_score += 35
+            if score_index < 6:
+                bonus_total[cur_player] += added_score
+                if 63+added_score > bonus_total[cur_player] >= 63:
+                    added_score += 35
             
+            score_total[cur_player] += added_score
+
             roll_count = 3
             roll_dice(31)
             
