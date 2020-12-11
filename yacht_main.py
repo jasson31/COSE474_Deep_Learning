@@ -136,10 +136,9 @@ def get_yacht_output():
                 score_board_output[i] = -1
 
         
-
-        return score_board_output + [roll_count] + dice_status\
-                + [bonus_total[cur_player] / 126]+ [score_total[cur_player] / 350],\
-                  score_total[cur_player], is_game_finished(), get_available_input()
+        return score_board_output + [roll_count] + dice_status_output(dice_status)\
+                + [bonus_total[cur_player]]+ [score_total[cur_player]],\
+                 score_total[cur_player], is_game_finished(), get_available_input()
 
 
 def set_multi_mode(mode):
@@ -170,19 +169,19 @@ def cheated():
 def get_reward(dice_status, score_index):
     checker = yacht_score.score(dice_status, score_func[score_index])
     if score_index <= score_func.index(yacht_score.SIXES):
-        if dice_status.count(score_index) == 0:
-            return -1
-        elif 1 <= dice_status.count(score_index) <= 2:
+        if dice_status.count(score_index+1) == 0:
+            return 0
+        elif 1 <= dice_status.count(score_index+1) <= 2:
             return 0.5
-        elif dice_status.count(score_index) == 3:
+        elif dice_status.count(score_index+1) == 3:
             return 1
-        elif 4 <= dice_status.count(score_index) <= 5:
+        elif 4 <= dice_status.count(score_index+1) <= 5:
             return 1.5
         else:
             return 2
     elif score_index == score_func.index(yacht_score.CHOICE):
         if checker <= 10:
-            return -1
+            return 0
         elif checker <= 20:
             return 0.5
         else:
@@ -190,20 +189,20 @@ def get_reward(dice_status, score_index):
     elif score_index == score_func.index(yacht_score.FOUR_OF_A_KIND) \
             or score_index == score_func.index(yacht_score.FULL_HOUSE):
         if checker <= 10:
-            return -1
-        elif checker <= 20:
+            return 0
+        elif checker <= 15:
             return 0.5
         else:
             return 1
     elif score_index == score_func.index(yacht_score.SMALL_STRAIGHT) \
             or score_index == score_func.index(yacht_score.LARGE_STRAIGHT):
-        if checker == 10:
-            return -1
+        if checker == 0:
+            return 0
         else:
             return 1
     elif score_index == score_func.index(yacht_score.YACHT):
-        if checker == 10:
-            return -0.2
+        if checker == 0:
+            return 0.2
         else:
             return 2.5
 
@@ -222,7 +221,7 @@ def update(command_index):
         if command_index < 31:
             if roll_count == 0:
                 cheated()
-                return -10
+                return -1
             else:
                 roll_dice(command_index+1)
                 return 0
@@ -231,7 +230,7 @@ def update(command_index):
             #print(str(score_index))
             if score_board[cur_player][score_index] == 0:
                 cheated()
-                return -10
+                return -1
             else:
                 added_score = set_score(dice_status, score_index)
             
