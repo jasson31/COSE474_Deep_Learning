@@ -126,8 +126,8 @@ def get_yacht_output():
         return
     else:
         return expected_scores() +\
+               dice_status_output(dice_status) +\
               [bonus_total[cur_player], roll_count], score_total[cur_player], is_game_finished()
-              #dice_status_output(dice_status) +\
 
 def set_multi_mode(mode):
     global multi_mode
@@ -150,9 +150,9 @@ def cheated():
             score_board[cur_player][i] = 1
 
 
-def update(command_index):
+def update(command_idx):
     global roll_count, score_total, cur_player
-    command_index = int(command_index)
+    command_index = int(command_idx)
     
     #print("played {0}:;;".format(command_index))
     if is_game_finished():
