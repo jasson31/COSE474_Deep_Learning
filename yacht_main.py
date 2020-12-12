@@ -172,39 +172,39 @@ def get_reward(dice_status, score_index):
         if dice_status.count(score_index+1) == 0:
             return 0
         elif 1 <= dice_status.count(score_index+1) <= 2:
-            return 0.5
-        elif dice_status.count(score_index+1) == 3:
             return 1
+        elif dice_status.count(score_index+1) == 3:
+            return 2
         elif 4 <= dice_status.count(score_index+1) <= 5:
-            return 1.5
+            return 3
         else:
             return 2
     elif score_index == score_func.index(yacht_score.CHOICE):
         if checker <= 10:
             return 0
         elif checker <= 20:
-            return 0.5
-        else:
             return 1
+        else:
+            return 2
     elif score_index == score_func.index(yacht_score.FOUR_OF_A_KIND) \
             or score_index == score_func.index(yacht_score.FULL_HOUSE):
         if checker <= 10:
             return 0
         elif checker <= 15:
-            return 0.5
-        else:
             return 1
+        else:
+            return 2
     elif score_index == score_func.index(yacht_score.SMALL_STRAIGHT) \
             or score_index == score_func.index(yacht_score.LARGE_STRAIGHT):
         if checker == 0:
             return 0
         else:
-            return 1
+            return 2
     elif score_index == score_func.index(yacht_score.YACHT):
         if checker == 0:
             return 0.2
         else:
-            return 2.5
+            return 5
 
 
 
