@@ -136,7 +136,7 @@ def get_yacht_output():
                 score_board_output[i] = -1
 
         
-        return score_board_output + [roll_count] + dice_status_output(dice_status)\
+        return score_board_output + [roll_count] + dice_status\
                 + [bonus_total[cur_player]]+ [score_total[cur_player]],\
                  score_total[cur_player], is_game_finished(), get_available_input()
 
@@ -221,7 +221,7 @@ def update(command_index):
         if command_index < 31:
             if roll_count == 0:
                 cheated()
-                return -1
+                return -10
             else:
                 roll_dice(command_index+1)
                 return 0
@@ -230,7 +230,7 @@ def update(command_index):
             #print(str(score_index))
             if score_board[cur_player][score_index] == 0:
                 cheated()
-                return -1
+                return -10
             else:
                 added_score = set_score(dice_status, score_index)
             
