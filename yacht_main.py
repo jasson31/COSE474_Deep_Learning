@@ -126,8 +126,9 @@ def get_yacht_output():
         return
     else:
         return expected_scores() +\
-               dice_status_output(dice_status) +\
+               dice_status +\
               [bonus_total[cur_player], roll_count], score_total[cur_player], is_game_finished()
+               #dice_status_output(dice_status) +\
 
 def set_multi_mode(mode):
     global multi_mode
