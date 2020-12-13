@@ -252,6 +252,7 @@ def reset_game():
     global score_board, dice_status, roll_count, score_total, cur_player, bonus_total
     score_board = [[1]*12]*2
     dice_status = [randint(1, 6), randint(1, 6), randint(1, 6), randint(1, 6), randint(1, 6)]
+    dice_status.sort()
     roll_count = 2
     score_total = [0, 0]
     bonus_total = [0, 0]
