@@ -8,7 +8,7 @@ def count_func(num):
 def four_of_a_kind(dice):
     for k, v in Counter(dice).items():
         if 4 <= v:
-            return k * 4
+            return sum(dice)
     return 0
 
 
@@ -30,7 +30,7 @@ FOURS = count_func(4)
 FIVES = count_func(5)
 SIXES = count_func(6)
 FULL_HOUSE = lambda dice: sum(dice) if \
-    sorted(tuple(Counter(dice).values())) == [2, 3] else 0
+    sorted(tuple(Counter(dice).values())) == [2, 3] or sorted(tuple(Counter(dice).values())) == [5] else 0
 FOUR_OF_A_KIND = four_of_a_kind
 SMALL_STRAIGHT = lambda dice: 15 if straight(dice) >= 4 else 0
 LARGE_STRAIGHT = lambda dice: 30 if 5 == straight(dice) else 0
